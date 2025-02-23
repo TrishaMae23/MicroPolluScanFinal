@@ -1,0 +1,13 @@
+train: ../train/images
+val: ../valid/images
+test: ../test/images
+
+nc: 3
+names: ['bead', 'fiber', 'fragment']
+
+roboflow:
+  workspace: luis-angelo-valerio
+  project: microplastic-v3
+  version: 2
+  license: CC BY 4.0
+  url: https://universe.roboflow.com/luis-angelo-valerio/microplastic-v3/dataset/2
