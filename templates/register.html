@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register - MicroPolluScan</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Roboto', sans-serif;
+            background: url('static/images/bg1.jpg') no-repeat center center fixed;
+            background-size: cover;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .auth-container {
+            display: flex;
+            width: 70%;  /* Adjusted to make the container smaller */
+            max-width: 900px;  /* Set max width for the container */
+            background-color: rgba(255, 255, 255, 0.9); /* Slightly transparent */
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .left {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: rgba(245, 247, 255, 0.7);
+            padding: 20px;
+        }
+
+        .left img {
+            max-width: 100%;
+            height: auto;
+        }
+
+        .form-card {
+            flex: 1;
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .form-card h1 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            color: #27374D;
+        }
+
+        .form-card p {
+            font-size: 1rem;
+            color: #27374D;
+            margin-bottom: 40px;
+        }
+
+        .form-card form {
+            width: 100%;
+            max-width: 400px;
+        }
+
+        .form-card form .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-card form .input-field {
+            width: 95%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+
+        .form-card form .btn {
+            width: 100%;
+            padding: 10px;
+            background-color: #27374D;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            font-size: 1rem;
+            cursor: pointer;
+        }
+
+        .form-card form .btn:hover {
+            background-color: #27374D;
+        }
+
+        .form-card .alternate {
+            margin-top: 20px;
+            font-size: 0.9rem;
+        }
+
+        .form-card .alternate a {
+            color: #27374D;
+            text-decoration: none;
+        }
+
+        .form-card .alternate a:hover {
+            text-decoration: underline;
+            color: #27374D;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="auth-container">
+        <div class="left">
+            <img src="static/images/logo.png" alt="MicroPolluScan logo with text 'MicroPolluScan - Upload, Detect and Monitor'" height="300" width="300">
+        </div>
+        <div class="form-card">
+            <h1>Register</h1>
+            <p>Create an account to explore our app</p>
+            <form method="POST" action="">
+                {{ form.hidden_tag() }}
+                <div class="form-group">
+                    {{ form.username(class="input-field", placeholder="Username") }}
+                </div>
+                <div class="form-group">
+                    {{ form.password(class="input-field", placeholder="Password") }}
+                </div>
+                <div class="form-group">
+                    <button type="submit" class="btn">Register</button>
+                </div>
+            </form>
+            <p class="alternate">
+                Already have an account? <a href="{{url_for('login')}}">Log In</a>
+            </p>
+        </div>
+    </div>
+</body>
+
+</html>

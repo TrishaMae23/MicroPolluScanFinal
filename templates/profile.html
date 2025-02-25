@@ -1,0 +1,261 @@
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Profile Page</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        .hidden {
+            display: none;
+        }
+        .upload-button {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            background-color: rgba(0, 0, 0, 0.5);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+        .upload-button:hover {
+            background-color: rgba(0, 0, 0, 0.7);
+        }
+        .cover-photo {
+            background-color: #27374d; /* Tailwind's blue-500 */
+            height: 12rem; /* Adjust height as needed */
+        }
+        body {
+            font-family: "Roboto", sans-serif;
+            background-color: #f0f4f8;
+            margin: 0;
+            padding: 0;
+        }
+        .navbar {
+            background-color: #fff;
+            padding: 10px 20px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .navbar .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: #27374d;
+        }
+        .navbar .menu {
+            display: flex;
+            align-items: center;
+        }
+        .navbar .menu a {
+            text-decoration: none;
+            color: #27374d;
+            margin-right: 15px;
+            font-weight: 500;
+        }
+        .navbar .menu a.active {
+            color: #27374d;
+            font-weight: bold;
+        }
+        .navbar .user-info {
+            display: flex;
+            align-items: center;
+        }
+        .navbar .user-info .user-name {
+            margin-right: 10px;
+        }
+        .container {
+            margin: 20px auto;
+            max-width: 1800px; /* Increased width for a wider layout */
+            width: 95%; /* Ensures responsiveness */
+        }
+        .title {
+            font-size: 30px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #27374D;
+        }
+        .images {
+            display: flex;
+            justify-content: space-between;
+            gap: 30px;
+        }
+        .images .image-container {
+            flex: 1;
+            background: #fff;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 50px;
+            text-align: center;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        .images img {
+            max-width: 100%;
+            border-radius: 5px;
+        }
+        .buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 15px;
+        }
+        .buttons button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            background-color: #27374D;
+            color: #fff;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        .buttons button:hover {
+            background-color: #27374D;
+        }
+        .form {
+            margin-top: 20px;
+        }
+        .form select, .form button {
+            width: 100%;
+            padding: 10px;
+            margin: 5px 0;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+        .form button {
+            background-color: #27374D;
+            color: #fff;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        .form button:hover {
+            background-color: #145bb5;
+        }
+        .count-container {
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-around;
+            padding: 15px;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        .count {
+            text-align: center;
+        }
+        .count span {
+            display: block;
+            font-size: 20px;
+            font-weight: bold;
+            color: #133E87;
+        }
+    </style>
+</head>
+<body class="bg-gray-100">
+
+    <!-- Navbar -->
+    <div class="navbar">
+        <div class="logo">MICROPOLLUSCAN</div>
+        <div class="menu">
+            <a href="/detection" id="nav-detection" >Detection</a>
+            <a href="/dashboard" id="nav-dashboard">Dashboard</a>
+            <div class="user-info dropdown">
+                {% if current_user.is_authenticated %}
+                    <span class="user-name dropdown-toggle" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        {{ current_user.username }}
+                    </span>
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                        <li><a class="dropdown-item" href="/profile">Profile</a></li>
+                        <li><a class="dropdown-item" href="/logout">Logout</a></li>
+                    </ul>
+                {% else %}
+                    <span class="user-name">Guest</span>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Profile Content -->
+    <div class="max-w-4xl mx-auto bg-white rounded-lg shadow-md mt-10">
+        <div class="relative cover-photo">
+            <div class="absolute -bottom-12 left-4">
+                <img id="profile-pic" alt="Profile picture" class="w-40 h-40 rounded-full border-4 border-white" height="100" src="https://www.w3schools.com/howto/img_avatar.png" width="100"/>
+                <label for="file-input" class="upload-button">
+                    <i class="fas fa-camera"></i>
+                </label>
+                <input type="file" id="file-input" accept="image/*" class="hidden"/>
+            </div>
+        </div>
+        <div class="pt-16 px-4 pb-4">
+            <h1 class="text-2xl font-semibold" id="username">
+                <!-- Dynamic username will be injected here -->
+            </h1>
+            <p class="text-gray-600">
+                Department of Agriculture
+            </p>
+        </div>
+
+        <div class="max-w-4xl mx-auto mt-4">
+            <div class="bg-white rounded-lg shadow-md p-4">
+                <h2 class="text-xl font-semibold">
+                    Account
+                </h2>
+                <ul class="mt-2 space-y-2">
+                    <li class="flex items-center">
+                        <i class="fas fa-calendar-alt text-yellow-500 mr-2"></i>
+                        <span>Joined</span>
+                        <!-- Joined date section -->
+                        <span class="ml-auto" id="joined-date"></span> <!-- This will show the joined date -->
+                    </li>
+                    <li class="flex items-center">
+                        <i class="fas fa-sign-out-alt text-red-500 mr-2"></i>
+                        <span id="force-logout" style="cursor: pointer; color: #e74c3c;">Force logout</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Dynamically inject the username from the server-side context (e.g., Jinja2)
+        var username = "{{ current_user.username }}"; // Use Jinja2 to get the username
+        document.getElementById("username").textContent = username; // Inject dynamic username into the <h1> tag
+
+        // Dynamically inject the joined date
+        var joinedDate = "{{ current_user.joined_date }}"; // Use Jinja2 to get the joined date
+        document.getElementById("joined-date").textContent = joinedDate; // Inject dynamic joined date
+    </script>
+
+    <script>
+        const fileInput = document.getElementById('file-input');
+        const profilePic = document.getElementById('profile-pic');
+
+        fileInput.addEventListener('change', function() {
+            const file = fileInput.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    profilePic.src = e.target.result; // Set the profile picture to the uploaded image
+                };
+                reader.readAsDataURL(file); // Read the file as a data URL
+            }
+        });
+
+        // Handle force logout click
+        document.getElementById('force-logout').addEventListener('click', function() {
+            // Perform the logout by redirecting to the logout URL
+            window.location.href = '/logout'; // Adjust to the actual logout URL in your app
+        });
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,138 @@
+<html lang="en">
+  <head>
+    <meta charset="utf-8"/>
+    <meta content="IE=edge" http-equiv="X-UA-Compatible"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Home</title>
+    <!-- Link to static CSS file -->
+    <link href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet"/>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&amp;display=swap" rel="stylesheet"/>
+    <style>
+      body {
+        margin: 0;
+        font-family: 'Roboto', sans-serif;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+        background-color: #F6F9FF;
+        text-align: center;
+      }
+
+      .home-container {
+        display: flex;
+        width: 90%;
+        height: 100%;
+      }
+
+      .left-side {
+        flex: 1;
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: flex-start;
+        text-align: left;
+      }
+
+      .right-side {
+        flex: 1;
+        padding: 20px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        position: relative;
+        overflow: hidden; /* Hide images that are not in view */
+      }
+
+      h1 {
+        font-family: 'Playfair Display', serif;
+        font-size: 3em;
+        font-weight: 700;
+        margin: 0;
+        color: #333;
+      }
+
+      p {
+        font-size: 1.2em;
+        font-weight: 400;
+        margin: 20px 0;
+        color: #666;
+        max-width: 800px;
+      }
+
+      .carousel {
+        display: flex;
+        transition: transform 1s ease-in-out; /* Make the transition slide */
+        width: 400%; /* Set to 400% to accommodate 4 images */
+      }
+
+      .carousel img {
+        width: 100%; /* Each image takes full container width */
+        height: 400px; /* Adjusted size */
+        object-fit: cover; /* Ensure image covers the container */
+      }
+
+      .get-started {
+        margin-top: 30px;
+      }
+
+      .get-started a {
+        text-decoration: none;
+        color: #000;
+        font-size: 1.2em;
+        font-weight: 700;
+      }
+
+      .get-started p {
+        font-size: 0.9em;
+        color: #999;
+        margin: 5px 0 0 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="home-container">
+      <div class="left-side">
+        <h1>MicroPolluScan</h1>
+        <p>
+          MicroPolluScan is a web-based monitoring solution designed to detect and analyze microplastic contamination in fishponds for laboratory use. It leverages advanced YOLOv8 object detection technology to accurately identify and classify microplastics into three types: fibers, fragments, and beads.
+        </p>
+        <div class="get-started">
+          <a href="/login">Get Started</a>
+        </div>
+      </div>
+
+      <div class="right-side">
+        <div class="carousel">
+          <img class="active" alt="Image of a snowy mountain with a lake in the foreground" src="static/images/bg1.jpg" />
+          <img alt="Image of a mountain range with a clear sky" src="static/images/bg2.jpg" />
+          <img alt="Image of a mountain with a pink sky" src="static/images/bg3.jpg" />
+          <img alt="Image of a forest with mountains in the background" src="static/images/bg4.jpg" />
+        </div>
+      </div>
+    </div>
+
+    <script>
+      const carousel = document.querySelector('.carousel');
+      const images = carousel.querySelectorAll('img');
+      const totalImages = images.length;
+      let currentIndex = 0;
+
+      // Function to move the carousel by adjusting the translateX
+      function moveCarousel() {
+        carousel.style.transform = `translateX(-${currentIndex * 100}%)`; // Move the carousel to the left by the current index
+      }
+
+      // Function to automatically slide to the next image
+      function autoSlide() {
+        currentIndex = (currentIndex + 1) % totalImages; // Loop back to the first image
+        moveCarousel();
+      }
+
+      // Set interval for auto sliding every 3 seconds (3000ms)
+      setInterval(autoSlide, 3000);
+    </script>
+  </body>
+</html>

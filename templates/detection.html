@@ -1,0 +1,273 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Micropolluscan Detection</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <style>
+        body {
+            font-family: "Roboto", sans-serif;
+            background-color: #f0f4f8;
+            margin: 0;
+            padding: 0;
+        }
+        .navbar {
+            background-color: #fff;
+            padding: 10px 20px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .navbar .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: #27374d;
+        }
+        .navbar .menu {
+            display: flex;
+            align-items: center;
+        }
+        .navbar .menu a {
+            text-decoration: none;
+            color: #27374d;
+            margin-right: 15px;
+            font-weight: 500;
+        }
+        .navbar .menu a.active {
+            color: #27374d;
+            font-weight: bold;
+        }
+        .navbar .user-info {
+            display: flex;
+            align-items: center;
+        }
+        .navbar .user-info .user-name {
+            margin-right: 10px;
+        }
+        .container {
+            margin: 20px auto;
+            max-width: 1800px; /* Increased width for a wider layout */
+            width: 95%; /* Ensures responsiveness */
+        }
+        .title {
+            font-size: 30px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #27374D;
+        }
+        .images {
+            display: flex;
+            justify-content: space-between;
+            gap: 30px;
+        }
+        .images .image-container {
+            flex: 1;
+            background: #fff;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 50px;
+            text-align: center;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        .images img {
+            max-width: 100%;
+            border-radius: 5px;
+        }
+        .buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 15px;
+        }
+        .buttons button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            background-color: #27374D;
+            color: #fff;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        .buttons button:hover {
+            background-color: #27374D;
+        }
+        .form {
+            margin-top: 20px;
+        }
+        .form select, .form button {
+            width: 100%;
+            padding: 10px;
+            margin: 5px 0;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+        .form button {
+            background-color: #27374D;
+            color: #fff;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        .form button:hover {
+            background-color: #145bb5;
+        }
+        .count-container {
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-around;
+            padding: 15px;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        .count {
+            text-align: center;
+        }
+        .count span {
+            display: block;
+            font-size: 20px;
+            font-weight: bold;
+            color: #133E87;
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <div class="logo">MICROPOLLUSCAN</div>
+        <div class="menu">
+            <a href="/detection" id="nav-detection" class="active">Detection</a>
+            <a href="/dashboard" id="nav-dashboard">Dashboard</a>
+            <div class="user-info dropdown">
+                {% if current_user.is_authenticated %}
+                    <span class="user-name dropdown-toggle" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        {{ current_user.username }}
+                    </span>
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                        <li><a class="dropdown-item" href="/profile">Profile</a></li>
+                        <li><a class="dropdown-item" href="/logout">Logout</a></li>
+                    </ul>
+                {% else %}
+                    <span class="user-name">Guest</span>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <div class="title">Detection</div>
+        <div class="count-container">
+            <div class="count">Beads: <span id="bead-count">0</span></div>
+            <div class="count">Fibers: <span id="fiber-count">0</span></div>
+            <div class="count">Fragments: <span id="fragment-count">0</span></div>
+            <div class="count">Total: <span id="detected-count">0</span></div>
+        </div>
+        <div class="images">
+            <div class="image-container">
+                <div>Live</div>
+                <img id="live-feed" src="{{ url_for('video_feed') }}" alt="Live feed of micropolluscan detection in progress">
+            </div>
+            <div class="image-container">
+                <div>Captured Image</div>
+                <img id="captured-image" src="" alt="Captured image of detected micropolluscan particles">
+            </div>
+        </div>
+        <div class="buttons">
+            <button id="capture-button">Capture</button>
+            <button id="retake-button">Retake</button>
+        </div>
+        <div class="form">
+            <select id="station" required>
+                <option value="" disabled selected>Select a station</option>
+                <option value="Station 1">Station 1</option>
+                <option value="Station 2">Station 2</option>
+                <option value="Station 3">Station 3</option>
+                <option value="Station 4">Station 4</option>
+                <option value="Station 5">Station 5</option>
+                <option value="Station 6">Station 6</option>
+                <option value="Station 7">Station 7</option>
+                <option value="Station 8">Station 8</option>
+                <option value="Station 9">Station 9</option>
+            </select>
+            <button id="save-button">Save</button>
+        </div>
+        <script>
+            document.getElementById('capture-button').addEventListener('click', function() {
+                fetch('/capture_frame', {
+                    method: 'POST'
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === "success") {
+                        const capturedImage = document.getElementById('captured-image');
+                        capturedImage.src = data.image_url; // Update captured image
+                        document.getElementById('detected-count').innerText = data.count; // Update total count
+                        document.getElementById('bead-count').innerText = data.counts.beads || 0; // Update bead count
+                        document.getElementById('fragment-count').innerText = data.counts.fragments || 0; // Update fragment count
+                        document.getElementById('fiber-count').innerText = data.counts.fibers || 0; // Update fiber count
+                    } else {
+                        alert("Error capturing frame.");
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert("An error occurred while capturing the frame.");
+                });
+            });
+
+            document.getElementById('retake-button').addEventListener('click', function() {
+                if (confirm("Are you sure you want to retake the image?")) {
+                    const capturedImage = document.getElementById('captured-image');
+                    capturedImage.src = ""; 
+                    document.getElementById('detected-count').innerText = '0'; // Reset detected count
+                    document.getElementById('bead-count').innerText = '0'; // Reset bead count
+                    document.getElementById('fragment-count').innerText = '0'; // Reset fragment count
+                    document.getElementById('fiber-count').innerText = '0'; // Reset fiber count
+                }
+            });
+
+            document.getElementById('save-button').addEventListener('click', function() {
+                const station = document.getElementById('station').value; // Get station value
+                const beads = parseInt(document.getElementById('bead-count').innerText) || 0; // Get the bead count as integer
+                const fragments = parseInt(document.getElementById('fragment-count').innerText) || 0; // Get the fragment count as integer
+                const fibers = parseInt(document.getElementById('fiber-count').innerText) || 0; // Get the fiber count as integer
+                const count = parseInt(document.getElementById('detected-count').innerText) || 0; // Get the total count as integer
+            
+                // Validate station
+                if (!station) {
+                    alert("Station is required to save the results.");
+                    return; // Exit the function if validation fails
+                }
+            
+                // Send data to the server
+                fetch('/save_results', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        station,
+                        beads,
+                        fragments,
+                        fibers,
+                        count,
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === "success") {
+                        alert("Results saved successfully!");
+                    } else {
+                        alert("Error saving results.");
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert("An error occurred while saving the results.");
+                });
+            });
+        </script>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
